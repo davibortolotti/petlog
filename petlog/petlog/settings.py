@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "petlog.pets",
+    "petlog.logger"
 ]
 
 MIDDLEWARE = [
@@ -77,9 +79,10 @@ WSGI_APPLICATION = "petlog.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "OPTIONS": {
-            "PASSWORD": os.getenv("POSTGRES_PASSWORD", "theQuickBrownFox"),
-        },
+        "PASSWORD": "theQuickBrownFox",
+        "NAME": "petlog",
+        "HOST": "localhost",
+        "USER": "dbatista"
     }
 }
 
