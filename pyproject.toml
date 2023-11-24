@@ -1,0 +1,13 @@
+[tool.poetry]
+name = "petlog"
+version = "0.1.0"
+authors = ['Davi Bortolotti Batista']
+description = "Pet Logging tool"
+license = "MIT"
+readme = "README.md"
+
+
+[tool.poetry.dependencies]
+python = "^3.9"
+django = "^4.2"
+psycopg = "3.1.8"
