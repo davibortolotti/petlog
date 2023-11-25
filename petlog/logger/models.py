@@ -19,7 +19,7 @@ class Vaccine(AbstractEntry):
     vaccine_type = models.CharField(max_length=30)
     given_on = models.DateField()
     given_at = models.CharField(max_length=30)
-    given_by = models.CharField()
+    given_by = models.CharField(max_length=30)
     next_dose = models.DateField()
 
 
@@ -35,5 +35,5 @@ class Training(AbstractEntry):
 class Medicine(AbstractEntry):
     name = models.CharField(max_length=50)
     linked_symptoms = models.ManyToManyField(Symptom)
-    periodicty = models.CharField()  # TODO this should be a choices or a database fk field maybe
+    periodicity = models.CharField(max_length=30)  # TODO this should be a choices or a database fk field maybe
     until = models.DateField()
