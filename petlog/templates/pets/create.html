@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+<main>
+    <div class="album py-5 bg-light">
+        <section class="jumbotron text-center">
+            <div class="container">
+                <h1 class="jumbotron-heading"></h1>
+                <p>
+                    <a href="{% url 'list_pets' %}" class="btn btn-primary my-2">Back to all pets</a>
+                </p>
+            </div>
+        </section>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="card mb-4 box-shadow">
+                        <div class="card-body">
+                            <form action="{% url 'create_pet' %}" method="post">
+                                {% csrf_token %}
+                                {% for field in form %}
+                                    <div class="form-group row">
+                                        <label for="species" class="col-auto col-form-label">{{ field.label_tag}}</label>
+                                        <div class="col">
+                                        {{ field }}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                                <input type="submit" value="Submit">
+                            </form>
+                            {{form.errors}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<!-- button for creating pet -->
+<!-- list all pets as cards -->
+
+{% endblock %}

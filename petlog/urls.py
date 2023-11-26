@@ -17,7 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from petlog import views
+
+
 urlpatterns = [
+    path("", views.home, name='home'),
+    path("logger/", include("petlog.logger.urls")),
+    path("pets/", include("petlog.pets.urls")),
     path("admin/", admin.site.urls),
-    path("", include("django.contrib.auth.urls")),
+    path("auth/", include("django.contrib.auth.urls")),
 ]

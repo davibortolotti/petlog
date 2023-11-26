@@ -1,11 +1,12 @@
 from django.db import models
-
+from django.utils.timezone import now
 from petlog.pets.models import Pet
 
 
 class AbstractEntry(models.Model):
     pet = models.ForeignKey(Pet, on_delete=models.CASCADE)
     text = models.TextField()
+    created_on = models.DateTimeField(default=now)
 
     class Meta:
         abstract = True
@@ -35,5 +36,5 @@ class Training(AbstractEntry):
 class Medicine(AbstractEntry):
     name = models.CharField(max_length=50)
     linked_symptoms = models.ManyToManyField(Symptom)
-    periodicity = models.CharField(max_length=30)  # TODO this should be a choices or a database fk field maybe
+    periodicity = models.CharField(null=True, max_length=30)  # TODO this should be a choices or a database fk field maybe
     until = models.DateField()
