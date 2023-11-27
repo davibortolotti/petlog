@@ -1,7 +1,8 @@
+from django.core.mail import send_mail
 from django.db import models
 from django.utils.timezone import now
 from petlog.pets.models import Pet
-
+from scheduler_field.fields import SchedulerDateField
 
 class AbstractEntry(models.Model):
     pet = models.ForeignKey(Pet, on_delete=models.CASCADE)
@@ -38,3 +39,18 @@ class Medicine(AbstractEntry):
     linked_symptoms = models.ManyToManyField(Symptom)
     periodicity = models.CharField(null=True, max_length=30)  # TODO this should be a choices or a database fk field maybe
     until = models.DateField()
+
+
+class TestModel(models.Model):
+    name = models.CharField(max_length=20)
+    reminder_date = SchedulerDateField(method_name='test_method')
+
+    def test_method(_id):
+        row = TestModel.objects.get(pk=_id)
+        send_mail(
+            "Subject here",
+            f"HELLO {row.name}",
+            "davibortolotti@gmail.com",
+            ["davibortolotti@gmail.com"],
+            fail_silently=False,
+        )

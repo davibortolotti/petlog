@@ -1,0 +1,56 @@
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Add vaccine</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form id="vaccine_form" action="{% url 'create_vaccine' %}" method="post">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="form-group row">
+                        <label for="species" class="col-auto col-form-label">{{ field.label_tag}}</label>
+                        <div class="col">
+                        {{ field }}
+                        </div>
+                    </div>
+                {% endfor %}
+                {% if form.errors %}
+                <div class="alert alert-danger">
+                    {{ form.errors }}
+                </div>
+            {% endif %}
+            </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" onclick=save_form() class="btn btn-primary">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+        var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        function save_form() {
+            data = $('#vaccine_form').serialize();
+            $.ajax({
+                url:"{% url 'create_vaccine' %}",
+                type: "POST",
+                data: data,
+                async:true,
+                headers: {'X-CSRFToken': csrftoken},
+                mode: 'same-origin', // Do not send CSRF token to another domain.
+                success:function(data, result){
+                    console.log(data);
+                    window.location.replace('{% url "home" %}');
+                },
+                error:function(result){
+                    console.log(result);
+                    $('#exampleModal').modal();
+                    $('#exampleModal').html(result.responseText);
+                }
+            });
+        }
+    </script>

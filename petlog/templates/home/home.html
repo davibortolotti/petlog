@@ -10,12 +10,17 @@
         <p>
             <a href="{% url 'list_pets' %}" class="btn btn-primary my-2">Pets</a>
             <a href="{% url 'create_entry' %}" class="btn btn-secondary my-2">Add entry</a>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" onclick=get_form()>
+            Add vacine
+            </button>
         </p>
     </div>
 </section>
 <main>
-    <div class="album py-5 bg-light">
+    <div class="py-5 bg-light">
         <div class="container d-flex  flex-wrap">
+            
             {% for event in events %}
                 <div class="col-md-4 w-80 mx-auto">
                     <div class="card bg-{{event.type}} h-80 m-4 box-shadow">
@@ -51,5 +56,24 @@
             {% endfor %}
         </div>
     </div>
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"></div>
+    {% block create_modal %} {% endblock %}
+    </div>
+    <script>
+
+        function get_form() {
+            $.ajax({
+                url:"{% url 'create_vaccine' %}", //the page containing python script
+                type: "GET", //request type,
+                data: {},
+                async:true,
+                success:function(result){
+                    $('#exampleModal').html(result);
+                    $('#exampleModal').modal()
+                }
+            });
+        
+        };
+    </script>
 </main>
 {% endblock content %}
