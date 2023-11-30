@@ -20,8 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-7x#$@tzsp&ihjhs_r+p90uhh)p^oqwuxkc2&0o^z5__#cf6$=!"
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -32,15 +31,16 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "scheduler_field",
+    "petlog",
+    "petlog.pets",
+    "petlog.logger",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "petlog",
-    "petlog.pets",
-    "petlog.logger"
 ]
 
 MIDDLEWARE = [
@@ -80,10 +80,10 @@ WSGI_APPLICATION = "petlog.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "PASSWORD": "theQuickBrownFox",
+        "PASSWORD": os.getenv('POSTGRES_PASSWORD'),
         "NAME": "petlog",
-        "HOST": "localhost",
-        "USER": "dbatista"
+        "HOST": "petlog_postgres",
+        "USER": "postgres"
     }
 }
 
@@ -93,6 +93,7 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
+
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
@@ -112,12 +113,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = 'America/Sao_Paulo'
+CELERY_ENABLE_UTC = False
+CELERY_TIMEZONE = TIME_ZONE
 
 USE_I18N = True
-
-USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
@@ -129,3 +129,14 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LOGIN_REDIRECT_URL = "/"
+
+EMAIL_HOST = 'smtp-relay.sendinblue.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER') 
+
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+
+LOGIN_URL = 'auth/login/'
+
+## Broker settings.
+CELERY_BROKER_URL = 'redis://petlog_redis/'

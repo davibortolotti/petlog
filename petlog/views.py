@@ -7,9 +7,9 @@ from petlog.logger import models, forms
 
 @login_required
 def home(request):
-    entries = models.Entry.objects.all().order_by(
+    entries = models.Entry.objects.filter(pet__guardian=request.user).order_by(
         '-created_on').annotate(type=Value('entry'))
-    vaccines = models.Vaccine.objects.all().order_by(
+    vaccines = models.Vaccine.objects.filter(pet__guardian=request.user).order_by(
         '-created_on').annotate(type=Value('vaccine'))
     events = list(entries) + list(vaccines)
 

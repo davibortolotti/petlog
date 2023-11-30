@@ -26,7 +26,19 @@ class Vaccine(AbstractEntry):
     given_on = models.DateField()
     given_at = models.CharField(max_length=30)
     given_by = models.CharField(max_length=30)
-    next_dose = models.DateField()
+    next_dose = SchedulerDateField(method_name='send_reminder_email')
+
+    def send_reminder_email(_id):
+        vaccine = Vaccine.objects.get(pk=_id)
+        pet = vaccine.pet
+        guardian = pet.guardian
+        send_mail(
+            f"Vaccine {vaccine.vaccine_type} for pet {pet.name} is due",
+            f"Hello {guardian.name}",
+            "bogus@petlog.com",
+            [guardian.email],
+            fail_silently=False,
+        )
 
 
 class Symptom(AbstractEntry):
@@ -49,12 +61,3 @@ class TestModel(models.Model):
     name = models.CharField(max_length=20)
     reminder_date = SchedulerDateField(method_name='test_method')
 
-    def test_method(_id):
-        row = TestModel.objects.get(pk=_id)
-        send_mail(
-            "Subject here",
-            f"HELLO {row.name}",
-            "davibortolotti@gmail.com",
-            ["davibortolotti@gmail.com"],
-            fail_silently=False,
-        )
