@@ -12,3 +12,5 @@ python = "^3.9"
 django = "^4.2"
 psycopg = "^3.1.8"
 celery = "~5.3"
+redis = "~5.0.1"
+django-scheduler-field = {'git' = 'https://github.com/davibortolotti/django-scheduler-field', 'tag' = 'v0.1.0'}
