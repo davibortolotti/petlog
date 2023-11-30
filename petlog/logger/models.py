@@ -1,8 +1,12 @@
+import logging
 from django.core.mail import send_mail
 from django.db import models
 from django.utils.timezone import now
 from petlog.pets.models import Pet
 from scheduler_field.fields import SchedulerDateField
+
+logger = logging.getLogger(__name__)
+
 
 class AbstractEntry(models.Model):
     pet = models.ForeignKey(Pet, on_delete=models.CASCADE)

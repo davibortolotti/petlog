@@ -9,10 +9,9 @@
         <h1 class="jumbotron-heading"></h1>
         <p>
             <a href="{% url 'list_pets' %}" class="btn btn-primary my-2">Pets</a>
-            <a href="{% url 'create_entry' %}" class="btn btn-secondary my-2">Add entry</a>
-            <!-- Button trigger modal -->
-            <button type="button" class="btn btn-primary" onclick=get_form()>
-            Add vacine
+            <button type="button" class="btn btn-secondary my-2 form_button" data-value="entry">Add entry</a>
+            <button type="button" class="btn btn-primary form_button" data-value="vaccine">
+                Add vacine
             </button>
         </p>
     </div>
@@ -20,59 +19,74 @@
 <main>
     <div class="py-5 bg-light">
         <div class="container d-flex  flex-wrap">
-            
+
             {% for event in events %}
-                <div class="col-md-4 w-80 mx-auto">
-                    <div class="card bg-{{event.type}} h-80 m-4 box-shadow">
-                        <div class="card-body">
-                            {% if event.type == 'entry' %}  
-                            <div class="card-header">Normal entry</div>                          
-                            <h5 class="card-title"> {{ event.created_on }}</h5>
-                            <p class="card-text  text-wrap">{{ event.text }}</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                                </div>
-                                <small class="text-muted">{{ event.pet.name }}</small>
+            <div class="col-md-4 w-80 mx-auto">
+                <div class="card bg-{{event.type}} h-80 m-4 box-shadow">
+                    <div class="card-body">
+                        {% if event.type == 'entry' %}
+                        <div class="card-header">Normal entry</div>
+                        <h5 class="card-title"> {{ event.created_on }}</h5>
+                        <p class="card-text  text-wrap">{{ event.text }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
                             </div>
-                            {% elif event.type == 'vaccine' %}
-                            <div class="card-header">Vaccine</div>                          
-                            <h5 class="card-title">{{ event.created_on }}</h5>
-                            <p class="card-text">{{ event.vaccine_type }}</p>
-                            <p class="card-text">Dose date: {{ event.given_on }}</p>
-                            <p class="card-text">Next Dose: {{ event.next_dose }}</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                                </div>
-                                <small class="text-muted">{{ event.pet.name }}</small>
-                            </div>
-                            {% endif %}
+                            <small class="text-muted">{{ event.pet.name }}</small>
                         </div>
+                        {% elif event.type == 'vaccine' %}
+                        <div class="card-header">Vaccine</div>
+                        <h5 class="card-title">{{ event.created_on }}</h5>
+                        <p class="card-text">{{ event.vaccine_type }}</p>
+                        <p class="card-text">Dose date: {{ event.given_on }}</p>
+                        <p class="card-text">Next Dose: {{ event.next_dose }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                            </div>
+                            <small class="text-muted">{{ event.pet.name }}</small>
+                        </div>
+                        {% endif %}
                     </div>
+                </div>
             </div>
             {% endfor %}
         </div>
     </div>
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"></div>
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true"></div>
     {% block create_modal %} {% endblock %}
     </div>
     <script>
+        $(document).ready(function() {
+            $('.form_button').on('click', get_form);
+        });
 
         function get_form() {
+            var form_type = $(this).data("value");
+            console.log(form_type);
+            var modal_url;
+            switch (form_type) {
+                case 'vaccine':
+                    modal_url = "{% url 'create_vaccine' %}";
+                    break
+                case 'entry':
+                    modal_url = "{% url 'create_entry' %}";
+                    break
+            }
             $.ajax({
-                url:"{% url 'create_vaccine' %}", //the page containing python script
+                url: modal_url,
                 type: "GET", //request type,
                 data: {},
-                async:true,
-                success:function(result){
+                async: true,
+                success: function (result) {
                     $('#exampleModal').html(result);
                     $('#exampleModal').modal()
                 }
             });
-        
+
         };
     </script>
 </main>

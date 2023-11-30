@@ -1,3 +1,5 @@
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -6,6 +8,7 @@ from django.views.generic.edit import CreateView
 from petlog.pets.models import Pet
 
 
+@login_required
 def list_pets(request):
     pets = Pet.objects.filter(guardian=request.user).order_by('-created_on')
     context = {"pets": pets}
@@ -13,7 +16,7 @@ def list_pets(request):
     return render(request, "pets/index.html", context)
 
 
-class PetCreateView(CreateView):
+class PetCreateView(LoginRequiredMixin, CreateView):
     model = Pet
     fields = ["name", "species", "breed", "color", "date_of_birth"]
     template_name = 'pets/create.html'

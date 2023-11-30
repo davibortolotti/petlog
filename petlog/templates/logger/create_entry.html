@@ -1,43 +1,53 @@
-{% extends 'base.html' %}
-{% block content %}
-
-
-<main>
-    <div class="album py-5 bg-light">
-        <section class="jumbotron text-center">
-            <div class="container">
-                <h1 class="jumbotron-heading"></h1>
-                <p>
-                    <a href="{% url 'home' %}" class="btn btn-primary my-2">Back to home</a>
-                </p>
-            </div>
-        </section>
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-4">
-                    <div class="card mb-4 box-shadow">
-                        <div class="card-body">
-                            <form action="{% url 'create_entry' %}" method="post">
-                                {% csrf_token %}
-                                {% for field in form %}
-                                    <div class="form-group row">
-                                        <label for="species" class="col-auto col-form-label">{{ field.label_tag}}</label>
-                                        <div class="col">
-                                        {{ field }}
-                                        </div>
-                                    </div>
-                                {% endfor %}
-                                <input type="submit" value="Submit">
-                            </form>
-                            {{form.errors}}
-                        </div>
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Add vaccine</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form action="{% url 'create_entry' %}" id="entry_form" method="post">
+                {% csrf_token %}
+                {% for field in form %}
+                <div class="form-group row">
+                    <label for="species" class="col-auto col-form-label">{{ field.label_tag}}</label>
+                    <div class="col">
+                        {{ field }}
                     </div>
                 </div>
-            </div>
+                {% endfor %}
+                <input type="submit" value="Submit">
+            </form>
+            {{form.errors}}
         </div>
     </div>
-</main>
-<!-- button for creating pet -->
-<!-- list all pets as cards -->
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    <button type="button" onclick=save_form() class="btn btn-primary">Save</button>
+</div>
 
-{% endblock %}
+<script>
+    var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    function save_form() {
+        data = $('#entry_form').serialize();
+        $.ajax({
+            url: "{% url 'create_entry' %}",
+            type: "POST",
+            data: data,
+            async: true,
+            headers: { 'X-CSRFToken': csrftoken },
+            mode: 'same-origin', // Do not send CSRF token to another domain.
+            success: function (data, result) {
+                console.log(data);
+                window.location.replace('{% url "home" %}');
+            },
+            error: function (result) {
+                console.log(result);
+                $('#exampleModal').modal();
+                $('#exampleModal').html(result.responseText);
+            }
+        });
+    }
+</script>
