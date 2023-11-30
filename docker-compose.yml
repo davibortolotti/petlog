@@ -1,5 +1,31 @@
 version: '3.8'
 services:
+  petlog_web:
+    depends_on:
+      - petlog_postgres
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      .env
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./petlog/:/app/petlog/
+
+  petlog_worker:
+    depends_on:
+      - petlog_redis
+      - petlog_postgres
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      .env
+    volumes:
+      - ./petlog/:/app/petlog/
+    entrypoint: ["celery", "-A", "petlog", "worker", "-B", "-l", "DEBUG"]
+    
   petlog_postgres:
     image: postgres:15
     shm_size: 1g
@@ -8,8 +34,11 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      # to clear this run `docker volume rm simplelegal_data-volume`
+      # to clear this run `docker volume rm data-volume`
       - data-volume:/var/lib/postgresql/data_petlog
+
+  petlog_redis:
+    image: redis:7.2.3
 
 volumes:
   data-volume:
