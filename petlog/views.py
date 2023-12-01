@@ -1,6 +1,10 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
 from django.db.models import Value
 from django.shortcuts import render
+from django.urls import reverse_lazy
+from django.views import generic
+
 
 from petlog.logger import models, forms
 
@@ -18,3 +22,9 @@ def home(request):
     events.sort(key=lambda x: x.created_on, reverse=True)
     context = {"events": events, "user": request.user}
     return render(request, "home/home.html", context)
+
+
+class SignUp(generic.CreateView):
+    form_class = UserCreationForm
+    success_url = reverse_lazy('login')
+    template_name = 'registration/signup.html'

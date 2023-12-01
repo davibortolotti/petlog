@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+<main>
+  <div class="py-5 bg-light">
+        <div class="container d-flex justify-content-center flex-wrap">
+          <div class="text-left">
+              <h2>Sign Up</h2>
+              <form method="post">
+                {% csrf_token %}
+                {% for field in form.visible_fields %}
+                <div class="form-group row">
+                    <label for="species" class="col-auto col-form-label">{{ field.label_tag}}</label>
+                    <div class="row">
+                        <div class="col my-1">
+                            {{ field }}
+                            <div class="row">
+                                <small id="emailHelp" class="form-text text-muted">{{ field.help_text}}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                {% endfor %}
+                <button class="btn btn-primary" type="submit">Submit</a>
+              </form>
+            
+        </div>
+    </div>
+</div>
+</main>
+{% endblock content %}

@@ -12,9 +12,12 @@
                 <button class="btn btn-primary" type="submit">Log In</a>
               </form>
             </div>
-            
-            {% endblock content %}
+            <div class="my-2">
+
+              <a href="{% url 'signup' %}"class="btn btn-primary">Register</a>
+            </div>
           </div>
         </div>
       </div>
-</main>
+    </main>
+  {% endblock content %}

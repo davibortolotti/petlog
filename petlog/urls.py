@@ -26,4 +26,5 @@ urlpatterns = [
     path("pets/", include("petlog.pets.urls")),
     path("admin/", admin.site.urls),
     path("auth/", include("django.contrib.auth.urls")),
+    path("auth/signup/", views.SignUp.as_view(), name='signup'),
 ]
