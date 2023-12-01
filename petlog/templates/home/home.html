@@ -16,9 +16,9 @@
                     </a>
                   
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                      <a class="dropdown-item form_button" data-value="entry" href="#">Entry</a>
-                      <a class="dropdown-item form_button" data-value="vaccine"  href="#">Vaccine</a>
-                      <a class="dropdown-item form_button" data-value="training"  href="#">Training</a>
+                      <a class="dropdown-item form_button" data-value="{% url 'create_entry' %}" href="#">Entry</a>
+                      <a class="dropdown-item form_button" data-value="{% url 'create_vaccine' %}"  href="#">Vaccine</a>
+                      <a class="dropdown-item form_button" data-value="{% url 'create_training' %}"  href="#">Training</a>
                     </div>
                   </div>
             </div>
@@ -34,38 +34,35 @@
                     <div class="card-body">
                         {% if event.type == 'entry' %}
                         <div class="card-header">Normal entry</div>
-                        <h5 class="card-title"> {{ event.created_on }}</h5>
+                        <h5 class="card-title  my-4"> {{ event.created_on }}</h5>
                         <p class="card-text  text-wrap">{{ event.text }}</p>
                         <div class="d-flex justify-content-between align-items-center">
-                            <!-- <div class="btn-group">
-                                <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                            </div> -->
                             <small class="text-muted">{{ event.pet.name }}</small>
+                            <div class="btn-group">
+                                <button type="button"  class="mx-1 btn btn-sm btn-outline-danger form_button" data-value="{% url 'delete_entry' event.id %}">Delete</button>
+                            </div>
                         </div>
                         {% elif event.type == 'vaccine' %}
                         <div class="card-header">Vaccine</div>
-                        <h5 class="card-title">{{ event.created_on }}</h5>
+                        <h5 class="card-title  my-4">{{ event.created_on }}</h5>
                         <p class="card-text">{{ event.vaccine_type }}</p>
                         <p class="card-text">Dose date: {{ event.given_on }}</p>
                         <p class="card-text">Next Dose: {{ event.next_dose }}</p>
                         <div class="d-flex justify-content-between align-items-center">
-                            <!-- <div class="btn-group">
-                                <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                            </div> -->
                             <small class="text-muted">{{ event.pet.name }}</small>
+                            <div class="btn-group">
+                                <button type="button"  class="mx-1 btn btn-sm btn-outline-danger form_button" data-value="{% url 'delete_vaccine' event.id %}">Delete</button>
+                            </div>
                         </div>
                         {% elif event.type == 'training' %}
                         <div class="card-header">Training</div>
-                        <h5 class="card-title"> {{ event.created_on }}</h5>
+                        <h5 class="card-title my-4"> {{ event.created_on }}</h5>
                         <p class="card-text text-wrap">{{ event.text }}</p>
                         <div class="d-flex justify-content-between align-items-center">
-                            <!-- <div class="btn-group">
-                                <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                            </div> -->
                             <small class="text-muted">{{ event.pet.name }}</small>
+                            <div class="btn-group">
+                                <button type="button"  class="mx-1 btn btn-sm btn-outline-danger form_button" data-value="{% url 'delete_training' event.id %}">Delete</button>
+                            </div>
                         </div>
                         {% endif %}
                     </div>
@@ -74,7 +71,7 @@
             {% endfor %}
         </div>
     </div>
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    <div class="modal fade" id="homeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true"></div>
     {% block create_modal %} {% endblock %}
     </div>
@@ -84,28 +81,15 @@
         });
 
         function get_form() {
-            var form_type = $(this).data("value");
-            console.log(form_type);
-            var modal_url;
-            switch (form_type) {
-                case 'vaccine':
-                    modal_url = "{% url 'create_vaccine' %}";
-                    break
-                case 'entry':
-                    modal_url = "{% url 'create_entry' %}";
-                    break
-                case 'training':
-                    modal_url = "{% url 'create_training' %}";
-                    break
-            }
+            var modal_url = $(this).data("value");
             $.ajax({
                 url: modal_url,
                 type: "GET", //request type,
                 data: {},
                 async: true,
                 success: function (result) {
-                    $('#exampleModal').html(result);
-                    $('#exampleModal').modal()
+                    $('#homeModal').html(result);
+                    $('#homeModal').modal()
                 }
             });
 
