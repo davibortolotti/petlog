@@ -11,11 +11,10 @@ def home(request):
         '-created_on').annotate(type=Value('entry'))
     vaccines = models.Vaccine.objects.filter(pet__guardian=request.user).order_by(
         '-created_on').annotate(type=Value('vaccine'))
-    events = list(entries) + list(vaccines)
+    training = models.Training.objects.filter(pet__guardian=request.user).order_by(
+        '-created_on').annotate(type=Value('training'))
+    events = list(entries) + list(vaccines) + list(training)
 
-    _forms = {
-        "vaccine": forms.VaccineForm
-    }
     events.sort(key=lambda x: x.created_on, reverse=True)
-    context = {"events": events, "forms": _forms, "user": request.user}
+    context = {"events": events, "user": request.user}
     return render(request, "home/home.html", context)

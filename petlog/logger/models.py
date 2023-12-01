@@ -57,9 +57,3 @@ class Medicine(AbstractEntry):
     linked_symptoms = models.ManyToManyField(Symptom)
     periodicity = models.CharField(null=True, max_length=30)  # TODO this should be a choices or a database fk field maybe
     until = models.DateField()
-
-
-class TestModel(models.Model):
-    name = models.CharField(max_length=20)
-    reminder_date = SchedulerDateField(method_name='test_method')
-

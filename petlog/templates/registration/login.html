@@ -2,12 +2,19 @@
 {% block content %}
 <main>
   <div class="py-5 bg-light">
-<h2>Log In</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Log In</button>
-</form>
-{% endblock content %}
-</div>
+        <div class="container d-flex justify-content-center flex-wrap">
+          <div class="text-center">
+            <div class="form-group">
+              <h2>Log In</h2>
+              <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button class="btn btn-primary" type="submit">Log In</a>
+              </form>
+            </div>
+            
+            {% endblock content %}
+          </div>
+        </div>
+      </div>
 </main>

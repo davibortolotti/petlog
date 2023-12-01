@@ -1,8 +1,8 @@
 <div class="modal-dialog" role="document">
     <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Add vaccine</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <h5 class="modal-title" id="exampleModalLabel">Add entry</h5>
+            <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
@@ -12,21 +12,21 @@
                 {% for field in form %}
                 <div class="form-group row">
                     <label for="species" class="col-auto col-form-label">{{ field.label_tag}}</label>
-                    <div class="col">
+                    <div class="col my-1">
                         {{ field }}
                     </div>
                 </div>
                 {% endfor %}
-                <input type="submit" value="Submit">
             </form>
             {{form.errors}}
         </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" onclick=save_form() class="btn btn-primary">Save</button>
+        </div>
     </div>
 </div>
-<div class="modal-footer">
-    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-    <button type="button" onclick=save_form() class="btn btn-primary">Save</button>
-</div>
+
 
 <script>
     var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;

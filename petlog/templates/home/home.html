@@ -7,13 +7,21 @@
 <section class="jumbotron text-center">
     <div class="container">
         <h1 class="jumbotron-heading"></h1>
-        <p>
-            <a href="{% url 'list_pets' %}" class="btn btn-primary my-2">Pets</a>
-            <button type="button" class="btn btn-secondary my-2 form_button" data-value="entry">Add entry</a>
-            <button type="button" class="btn btn-primary form_button" data-value="vaccine">
-                Add vacine
-            </button>
-        </p>
+            <div class="row d-flex justify-content-center">
+
+                <a href="{% url 'list_pets' %}" class="col-1 btn btn-primary">Pets</a>
+                <div class="dropdown show col-1">
+                    <a class="btn btn-secondary dropdown-toggle " href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Add
+                    </a>
+                  
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                      <a class="dropdown-item form_button" data-value="entry" href="#">Entry</a>
+                      <a class="dropdown-item form_button" data-value="vaccine"  href="#">Vaccine</a>
+                      <a class="dropdown-item form_button" data-value="training"  href="#">Training</a>
+                    </div>
+                  </div>
+            </div>
     </div>
 </section>
 <main>
@@ -21,7 +29,7 @@
         <div class="container d-flex  flex-wrap">
 
             {% for event in events %}
-            <div class="col-md-4 w-80 mx-auto">
+            <div class="col-md-8 w-80 mx-auto">
                 <div class="card bg-{{event.type}} h-80 m-4 box-shadow">
                     <div class="card-body">
                         {% if event.type == 'entry' %}
@@ -29,10 +37,10 @@
                         <h5 class="card-title"> {{ event.created_on }}</h5>
                         <p class="card-text  text-wrap">{{ event.text }}</p>
                         <div class="d-flex justify-content-between align-items-center">
-                            <div class="btn-group">
+                            <!-- <div class="btn-group">
                                 <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
                                 <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                            </div>
+                            </div> -->
                             <small class="text-muted">{{ event.pet.name }}</small>
                         </div>
                         {% elif event.type == 'vaccine' %}
@@ -42,10 +50,21 @@
                         <p class="card-text">Dose date: {{ event.given_on }}</p>
                         <p class="card-text">Next Dose: {{ event.next_dose }}</p>
                         <div class="d-flex justify-content-between align-items-center">
-                            <div class="btn-group">
+                            <!-- <div class="btn-group">
                                 <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
                                 <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                            </div>
+                            </div> -->
+                            <small class="text-muted">{{ event.pet.name }}</small>
+                        </div>
+                        {% elif event.type == 'training' %}
+                        <div class="card-header">Training</div>
+                        <h5 class="card-title"> {{ event.created_on }}</h5>
+                        <p class="card-text text-wrap">{{ event.text }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <!-- <div class="btn-group">
+                                <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                            </div> -->
                             <small class="text-muted">{{ event.pet.name }}</small>
                         </div>
                         {% endif %}
@@ -74,6 +93,9 @@
                     break
                 case 'entry':
                     modal_url = "{% url 'create_entry' %}";
+                    break
+                case 'training':
+                    modal_url = "{% url 'create_training' %}";
                     break
             }
             $.ajax({
