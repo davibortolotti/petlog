@@ -27,18 +27,20 @@ class Vaccine(AbstractEntry):
     given_at = models.CharField(max_length=30)
     given_by = models.CharField(max_length=30)
     next_dose = SchedulerDateField(method_name='send_reminder_email')
+    remind_me = models.BooleanField(default=False)
 
     def send_reminder_email(_id):
         vaccine = Vaccine.objects.get(pk=_id)
-        pet = vaccine.pet
-        guardian = pet.guardian
-        send_mail(
-            f"Vaccine {vaccine.vaccine_type} for pet {pet.name} is due",
-            f"Hello {guardian.name}",
-            "bogus@petlog.com",
-            [guardian.email],
-            fail_silently=False,
-        )
+        if vaccine.remind_me:
+            pet = vaccine.pet
+            guardian = pet.guardian
+            send_mail(
+                f"Vaccine {vaccine.vaccine_type} for pet {pet.name} is due",
+                f"Hello {guardian.name}",
+                "bogus@petlog.com",
+                [guardian.email],
+                fail_silently=False,
+            )
 
 
 class Symptom(AbstractEntry):
